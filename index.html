@@ -160,6 +160,43 @@
             font-weight: 700;
             margin: 15px 0;
         }
+
+        .selected-options {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: left;
+        }
+        
+        .selected-option {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .selected-option:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .option-name {
+            font-weight: 500;
+            opacity: 0.9;
+        }
+        
+        .option-value {
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .option-price {
+            color: #ffd700;
+            font-weight: 700;
+        }
         
         .example {
             background-color: #f8f0ff;
@@ -284,6 +321,22 @@
     <div class="result">
         <h2>Итоговая стоимость</h2>
         <div class="total-price" id="total-price">$175</div>
+        
+        <div class="selected-options" id="selected-options">
+            <div class="selected-option">
+                <span class="option-name">Пакет:</span>
+                <span class="option-value">🔥 Стандарт+ <span class="option-price">$75</span></span>
+            </div>
+            <div class="selected-option">
+                <span class="option-name">Время показа:</span>
+                <span class="option-value">🌇 Вечер <span class="option-price">+$50</span></span>
+            </div>
+            <div class="selected-option">
+                <span class="option-name">Доп. услуги:</span>
+                <span class="option-value">🔒 Без удаления <span class="option-price">+$50</span></span>
+            </div>
+        </div>
+        
         <p>Цена обновляется автоматически</p>
     </div>
 
@@ -308,20 +361,71 @@
         // Функция расчета стоимости
         function calculateTotal() {
             let total = 0;
+            let optionsHtml = '';
             
             // Базовый пакет
-            total += parseInt(packageSelect.value);
+            const packageValue = parseInt(packageSelect.value);
+            const packageText = packageSelect.options[packageSelect.selectedIndex].text;
+            total += packageValue;
+            optionsHtml += `
+                <div class="selected-option">
+                    <span class="option-name">Пакет:</span>
+                    <span class="option-value">${packageText.split(' (')[0]} <span class="option-price">$${packageValue}</span></span>
+                </div>
+            `;
             
             // Время показа
-            total += parseInt(timeSelect.value);
+            const timeValue = parseInt(timeSelect.value);
+            const timeText = timeSelect.options[timeSelect.selectedIndex].text.split(') ')[0] + ')';
+            total += timeValue;
+            optionsHtml += `
+                <div class="selected-option">
+                    <span class="option-name">Время показа:</span>
+                    <span class="option-value">${timeText} <span class="option-price">+$${timeValue}</span></span>
+                </div>
+            `;
             
             // Дополнительные услуги
-            if (noDeleteCheckbox.checked) total += parseInt(noDeleteCheckbox.value);
-            if (pinMonthCheckbox.checked) total += parseInt(pinMonthCheckbox.value);
-            if (mentionCheckbox.checked) total += parseInt(mentionCheckbox.value);
+            let servicesHtml = '';
+            
+            if (noDeleteCheckbox.checked) {
+                const value = parseInt(noDeleteCheckbox.value);
+                total += value;
+                servicesHtml += `🔒 Без удаления <span class="option-price">+$${value}</span>, `;
+            }
+            
+            if (pinMonthCheckbox.checked) {
+                const value = parseInt(pinMonthCheckbox.value);
+                total += value;
+                servicesHtml += `📌 Закреп на месяц <span class="option-price">+$${value}</span>, `;
+            }
+            
+            if (mentionCheckbox.checked) {
+                const value = parseInt(mentionCheckbox.value);
+                total += value;
+                servicesHtml += `🔔 Упоминания <span class="option-price">+$${value}</span>, `;
+            }
+            
+            if (servicesHtml) {
+                servicesHtml = servicesHtml.slice(0, -2); // Удаляем последнюю запятую
+                optionsHtml += `
+                    <div class="selected-option">
+                        <span class="option-name">Доп. услуги:</span>
+                        <span class="option-value">${servicesHtml}</span>
+                    </div>
+                `;
+            } else {
+                optionsHtml += `
+                    <div class="selected-option">
+                        <span class="option-name">Доп. услуги:</span>
+                        <span class="option-value">Нет</span>
+                    </div>
+                `;
+            }
             
             // Обновляем отображение
             totalElement.textContent = `$${total}`;
+            document.getElementById('selected-options').innerHTML = optionsHtml;
         }
         
         // Добавляем обработчики событий
