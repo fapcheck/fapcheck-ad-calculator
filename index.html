@@ -199,66 +199,6 @@
             margin-bottom: 3px;
         }
         
-        .order-form {
-            background: #f9f9ff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 25px;
-            border: 2px dashed #8A2BE2;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-        
-        .submit-btn {
-            display: block;
-            width: 100%;
-            background: linear-gradient(135deg, #4B0082, #8A2BE2);
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            margin-top: 20px;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
-        }
-        
-        .submit-btn:active {
-            transform: translateY(1px);
-        }
-        
-        .confirmation {
-            display: none;
-            background: #e6ffed;
-            border-left: 4px solid #38a169;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 0 8px 8px 0;
-            text-align: center;
-        }
-        
         @media (max-width: 600px) {
             body {
                 padding: 15px;
@@ -347,30 +287,6 @@
         <p>Цена обновляется автоматически</p>
     </div>
 
-    <div class="container">
-        <div class="order-form">
-            <h2>📬 Отправить заявку менеджеру</h2>
-            <p>Заполните форму, и я свяжусь с вами в течение 15 минут!</p>
-            
-            <div class="form-group">
-                <label for="username">Ваше имя или название проекта</label>
-                <input type="text" id="username" placeholder="Как к вам обращаться?">
-            </div>
-            
-            <div class="form-group">
-                <label for="contact">Контакт для связи (Telegram, Email или телефон)</label>
-                <input type="text" id="contact" placeholder="@username, email или телефон">
-            </div>
-            
-            <button class="submit-btn" id="send-btn">📩 Отправить заявку</button>
-            
-            <div class="confirmation" id="confirmation">
-                <h3>✅ Заявка отправлена!</h3>
-                <p>Я свяжусь с вами в течение 15 минут. Для срочных вопросов пишите: <a href="https://t.me/your_username">@your_username</a></p>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Получаем элементы DOM
         const packageSelect = document.getElementById('package');
@@ -379,10 +295,6 @@
         const pinMonthCheckbox = document.getElementById('pin-month');
         const mentionCheckbox = document.getElementById('mention');
         const totalElement = document.getElementById('total-price');
-        const sendBtn = document.getElementById('send-btn');
-        const confirmation = document.getElementById('confirmation');
-        const usernameInput = document.getElementById('username');
-        const contactInput = document.getElementById('contact');
         
         // Все элементы, которые влияют на стоимость
         const priceElements = [
@@ -412,72 +324,6 @@
             totalElement.textContent = `$${total}`;
         }
         
-        // Функция получения названия пакета
-        function getPackageName() {
-            return packageSelect.options[packageSelect.selectedIndex].text;
-        }
-        
-        // Функция получения времени показа
-        function getTimeSlot() {
-            return timeSelect.options[timeSelect.selectedIndex].text;
-        }
-        
-        // Функция получения доп. услуг
-        function getAdditionalServices() {
-            let services = [];
-            if (noDeleteCheckbox.checked) services.push('🔒 Пост без удаления');
-            if (pinMonthCheckbox.checked) services.push('📌 Закреп на месяц');
-            if (mentionCheckbox.checked) services.push('🔔 Упоминание во всех постах');
-            
-            return services.length > 0 ? services.join(', ') : 'Нет дополнительных услуг';
-        }
-        
-        // Функция отправки заявки
-        function sendOrder() {
-            const username = usernameInput.value.trim();
-            const contact = contactInput.value.trim();
-            
-            if (!username || !contact) {
-                alert('Пожалуйста, заполните все поля');
-                return;
-            }
-            
-            // Формируем сообщение
-            const message = `📣 *Новая заявка на рекламу в @fapcheck* 📣
-            
-👤 *Имя:* ${username}
-📞 *Контакт:* ${contact}
-
-📦 *Пакет:* ${getPackageName()}
-⏰ *Время показа:* ${getTimeSlot()}
-➕ *Доп. услуги:* ${getAdditionalServices()}
-💵 *Итоговая стоимость:* ${totalElement.textContent}
-
-🚀 *Ссылка на калькулятор:* ${window.location.href}`;
-
-            // Здесь будет отправка сообщения
-            // В реальном проекте нужно подключить Telegram Bot API
-            // Для демо просто покажем подтверждение
-            console.log("Сообщение для Telegram:\n", message);
-            
-            // Показываем подтверждение
-            confirmation.style.display = 'block';
-            sendBtn.textContent = '✅ Заявка отправлена';
-            sendBtn.disabled = true;
-            
-            // Прокручиваем к подтверждению
-            confirmation.scrollIntoView({behavior: 'smooth'});
-            
-            // Очищаем форму через 5 секунд
-            setTimeout(() => {
-                usernameInput.value = '';
-                contactInput.value = '';
-                sendBtn.textContent = '📩 Отправить заявку';
-                sendBtn.disabled = false;
-                confirmation.style.display = 'none';
-            }, 5000);
-        }
-        
         // Добавляем обработчики событий
         priceElements.forEach(element => {
             if (element.tagName === 'SELECT') {
@@ -486,8 +332,6 @@
                 element.addEventListener('click', calculateTotal);
             }
         });
-        
-        sendBtn.addEventListener('click', sendOrder);
         
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', calculateTotal);
