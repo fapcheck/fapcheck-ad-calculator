@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор рекламы в FapCheck</title>
+    <title>Калькулятор рекламы @fapcheck</title>
     <style>
         :root {
             --primary: #8A2BE2;
@@ -41,6 +41,15 @@
         h1 {
             font-size: 2.2rem;
             margin-bottom: 10px;
+        }
+        
+        .channel-name {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin-top: 8px;
+            font-size: 1.1rem;
         }
         
         .container {
@@ -172,6 +181,24 @@
             font-style: italic;
         }
         
+        .mention-details {
+            background: #f0f7ff;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            border-left: 3px solid #4b9bff;
+        }
+        
+        .mention-details ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+        
+        .mention-details li {
+            margin-bottom: 3px;
+        }
+        
         @media (max-width: 600px) {
             body {
                 padding: 15px;
@@ -189,7 +216,8 @@
 </head>
 <body>
     <header>
-        <h1>Калькулятор рекламы FapCheck</h1>
+        <h1>Калькулятор рекламы</h1>
+        <div class="channel-name">@fapcheck</div>
         <p>Рассчитайте стоимость за 30 секунд</p>
     </header>
 
@@ -237,8 +265,14 @@
                     🔔 Упоминание во всех постах
                     <span class="price-tag">+$95</span>
                 </label>
+                <div class="mention-details">
+                    <strong>Срок действия упоминания:</strong>
+                    <ul>
+                        <li><strong>1 неделя</strong> (~14 постов) при выборе закрепа на неделю (включен в Стандарт+)</li>
+                        <li><strong>1 месяц</strong> (~62 поста) при заказе закрепа на месяц</li>
+                    </ul>
+                </div>
             </div>
-            <p class="note">Упоминание действует 1 неделю (~14 постов)</p>
         </div>
 
         <div class="example">
